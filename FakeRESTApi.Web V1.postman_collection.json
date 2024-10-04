@@ -1,0 +1,408 @@
+{
+	"info": {
+		"_postman_id": "33554576-8641-4f70-90c9-b42f17109c4f",
+		"name": "FakeRESTApi.Web V1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37994888"
+	},
+	"item": [
+		{
+			"name": "Activities",
+			"item": [
+				{
+					"name": "All",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"/**\r",
+									" * Validar se o retorno é um array de objetos\r",
+									" */\r",
+									"\r",
+									"pm.test(\"Is an array of objects\", function () {\r",
+									"    pm.expect(pm.response.json()).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"/**\r",
+									" * Validar o contrato\r",
+									" */\r",
+									"\r",
+									"var schema = {\r",
+									"  \"type\": \"array\",\r",
+									"  \"properties\": {\r",
+									"    \"id\": {\r",
+									"      \"type\": \"integer\"\r",
+									"    },\r",
+									"    \"title\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"dueDate\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"completed\": {\r",
+									"      \"type\": \"boolean\"\r",
+									"    }\r",
+									"  },\r",
+									"  \"required\": [\r",
+									"    \"id\",\r",
+									"    \"title\",\r",
+									"    \"dueDate\",\r",
+									"    \"completed\"\r",
+									"  ]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function () {\r",
+									"    const Ajv = require('ajv');\r",
+									"    const ajv = new Ajv();\r",
+									"    pm.expect(ajv.validate(schema, pm.response.json())).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test('Captura de ID', function () {\r",
+									"    var id = pm.response.json();\r",
+									"    console.log(id[0]['id']);\r",
+									"    pm.globals.set(\"activitiesId\", id[0]['id']);\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/Activities",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"/**\r",
+									" * Validar se o retorno é um objeto\r",
+									" */\r",
+									"\r",
+									"pm.test(\"Is an array of objects\", function () {\r",
+									"    pm.expect(pm.response.json()).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"/**\r",
+									" * Validar o contrato\r",
+									" */\r",
+									"\r",
+									"var schema = {\r",
+									"  \"type\": \"object\",\r",
+									"  \"properties\": {\r",
+									"    \"id\": {\r",
+									"      \"type\": \"integer\"\r",
+									"    },\r",
+									"    \"title\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"dueDate\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"completed\": {\r",
+									"      \"type\": \"boolean\"\r",
+									"    }\r",
+									"  },\r",
+									"  \"required\": [\r",
+									"    \"id\",\r",
+									"    \"title\",\r",
+									"    \"dueDate\",\r",
+									"    \"completed\"\r",
+									"  ]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function () {\r",
+									"    const Ajv = require('ajv');\r",
+									"    const ajv = new Ajv();\r",
+									"    pm.expect(ajv.validate(schema, pm.response.json())).to.be.true;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/Activities/{{activitiesId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Activities",
+								"{{activitiesId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Activity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.unset(\"id\");\r",
+									"pm.globals.unset(\"title\");\r",
+									"pm.globals.unset(\"completed\");\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"/**\r",
+									" * Validar se o retorno é um objeto\r",
+									" */\r",
+									"\r",
+									"pm.test(\"Is an object\", function () {\r",
+									"    pm.expect(pm.response.json()).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"/**\r",
+									" * Validar o contrato\r",
+									" */\r",
+									"\r",
+									"var schema = {\r",
+									"  \"type\": \"object\",\r",
+									"  \"properties\": {\r",
+									"    \"id\": {\r",
+									"      \"type\": \"integer\"\r",
+									"    },\r",
+									"    \"title\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"dueDate\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"completed\": {\r",
+									"      \"type\": \"boolean\"\r",
+									"    }\r",
+									"  },\r",
+									"  \"required\": [\r",
+									"    \"id\",\r",
+									"    \"title\",\r",
+									"    \"dueDate\",\r",
+									"    \"completed\"\r",
+									"  ]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function () {\r",
+									"    const Ajv = require('ajv');\r",
+									"    const ajv = new Ajv();\r",
+									"    pm.expect(ajv.validate(schema, pm.response.json())).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.globals.set(\"id\", pm.iterationData.get(\"id\"))\r",
+									"pm.globals.set(\"title\", pm.iterationData.get(\"title\"))\r",
+									"pm.globals.set(\"completed\", pm.iterationData.get(\"completed\"))\r",
+									"\r",
+									"// pm.test('Validar o payload da criacao da atividade', function () {\r",
+									"//     pm.expect(pm.response.json().id).to.be.eql(pm.iterationData.get(\"id\"))\r",
+									"//     pm.expect(pm.response.json().title).to.be.eql(pm.iterationData.get(\"title\"))\r",
+									"//     pm.expect(pm.response.json().completed).to.be.eql(pm.iterationData.get(\"completed\"))\r",
+									"// })\r",
+									"\r",
+									"pm.test('Captura de ID', function () {\r",
+									"    var id = pm.response.json();\r",
+									"    console.log(id['id']); // Fixed the way to access 'id' property\r",
+									"    pm.globals.unset(\"activitiesId\");\r",
+									"    pm.globals.set(\"activitiesId\", id['id']); // Fixed the way to access 'id' property\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": {{id}},\r\n    \"title\": \"{{title}}\",\r\n    \"dueDate\": \"2024-09-30T15:19:42.881Z\",\r\n    \"completed\": {{completed}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/Activities",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Activity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"/**\r",
+									" * Validar se o retorno é um objeto\r",
+									" */\r",
+									"\r",
+									"pm.test(\"Is an array of objects\", function () {\r",
+									"    pm.expect(pm.response.json()).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"/**\r",
+									" * Validar o contrato\r",
+									" */\r",
+									"\r",
+									"var schema = {\r",
+									"  \"type\": \"object\",\r",
+									"  \"properties\": {\r",
+									"    \"id\": {\r",
+									"      \"type\": \"integer\"\r",
+									"    },\r",
+									"    \"title\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"dueDate\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"completed\": {\r",
+									"      \"type\": \"boolean\"\r",
+									"    }\r",
+									"  },\r",
+									"  \"required\": [\r",
+									"    \"id\",\r",
+									"    \"title\",\r",
+									"    \"dueDate\",\r",
+									"    \"completed\"\r",
+									"  ]\r",
+									"};\r",
+									"\r",
+									"pm.test('Schema is valid', function () {\r",
+									"    const Ajv = require('ajv');\r",
+									"    const ajv = new Ajv();\r",
+									"    pm.expect(ajv.validate(schema, pm.response.json())).to.be.true;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test('Validar o payload da criacao da atividade', function () {\r",
+									"    pm.expect(pm.response.json().id).to.be.eql(pm.iterationData.get(\"id\"))\r",
+									"    pm.expect(pm.response.json().title).to.be.eql(pm.iterationData.get(\"title\"))\r",
+									"    pm.expect(pm.response.json().completed).to.be.eql(true)\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": {{activitiesId}},\r\n    \"title\": \"{{title}}\",\r\n    \"dueDate\": \"2024-09-30T15:19:42.881Z\",\r\n    \"completed\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/Activities/{{activitiesId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Activities",
+								"{{activitiesId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Activity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/Activities/{{activitiesId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Activities",
+								"{{activitiesId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
